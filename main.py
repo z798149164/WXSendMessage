@@ -77,6 +77,5 @@ data = {"date": {"value": current_date, "color": get_random_color()},
         "en": {"value": words['en'], "color": get_random_color()},
         "ch": {"value": words['ch'], "color": get_random_color()}, "city": {"value": city, "color": get_random_color()}}
 for user in user_id:
-    print("用户弟弟弟弟： " + user)
     res = wm.send_template(user, template_id, data)
 print(res)
