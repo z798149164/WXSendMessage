@@ -21,7 +21,8 @@ today_weekday = week_day[today.weekday()]
 current_date = str(today.date()) + " " + today_weekday
 
 
-start_date = os.environ['START_DATE']
+start_date = os.environ['START_DATE'].split(",")
+print(start_date)
 city = os.environ['CITY']
 birthday = os.environ['BIRTHDAY']
 
