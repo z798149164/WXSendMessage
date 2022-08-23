@@ -7,8 +7,6 @@ import os
 import random
 
 
-# text = requests.get("https://api.oddfar.com/yl/q.php?c=2011&encode=text").text
-
 today = datetime.now()
 week_day = {
     0: '星期一',
@@ -21,6 +19,7 @@ week_day = {
 }
 today_weekday = week_day[today.weekday()]
 current_date = str(today.date()) + " " + today_weekday
+
 
 start_date = os.environ['START_DATE']
 city = os.environ['CITY']
@@ -54,10 +53,11 @@ def get_count():
 
 
 def get_words():
-    words = requests.get("https://api.shadiao.pro/chp")
-    if words.status_code != 200:
-        return get_words()
-    return words.json()['data']['text']
+    url = "http://open.iciba.com/dsapi/"
+    r = requests.get(url)
+    content = r.json()['content']
+    note = r.json()['note']
+    return {"ch": note, "en": content}
 
 
 def get_random_color():
@@ -68,9 +68,13 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 wea, min_temperature, max_temperature = get_weather()
-data = {"date": {"value": current_date, "color": get_random_color()}, "weather": {"value": wea, "color": get_random_color()},
-        "min_temperature": {"value": min_temperature, "color": get_random_color()}, "max_temperature": {"value": max_temperature, "color": get_random_color()},
+words = get_words()
+data = {"date": {"value": current_date, "color": get_random_color()},
+        "weather": {"value": wea, "color": get_random_color()},
+        "min_temperature": {"value": min_temperature, "color": get_random_color()},
+        "max_temperature": {"value": max_temperature, "color": get_random_color()},
         "love_days": {"value": get_count(), "color": get_random_color()},
-        "words": {"value": get_words(), "color": get_random_color()}, "city": {"value": city, "color": get_random_color()}}
+        "en": {"value": words['en'], "color": get_random_color()},
+        "ch": {"value": words['ch'], "color": get_random_color()}, "city": {"value": city, "color": get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
