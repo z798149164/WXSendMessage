@@ -21,15 +21,14 @@ today_weekday = week_day[today.weekday()]
 current_date = str(today.date()) + " " + today_weekday
 
 
-start_date = os.environ['START_DATE'].split(",")
-print(start_date)
+start_date = os.environ['START_DATE']
 city = os.environ['CITY']
 birthday = os.environ['BIRTHDAY']
 
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
 
-user_id = os.environ["USER_ID"]
+user_id = os.environ["USER_ID"].split(",")
 template_id = os.environ["TEMPLATE_ID"]
 
 
@@ -77,5 +76,7 @@ data = {"date": {"value": current_date, "color": get_random_color()},
         "love_days": {"value": get_count(), "color": get_random_color()},
         "en": {"value": words['en'], "color": get_random_color()},
         "ch": {"value": words['ch'], "color": get_random_color()}, "city": {"value": city, "color": get_random_color()}}
-res = wm.send_template(user_id, template_id, data)
+for user in user_id:
+    print("用户弟弟弟弟： " + user)
+    res = wm.send_template(user, template_id, data)
 print(res)
